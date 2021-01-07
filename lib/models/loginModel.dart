@@ -5,9 +5,7 @@ class LoginModel {
 
   LoginModel(this.password, this.user);
 
-factory ImovelModel.fromJson(Map<String, dynamic> json) {
-    return ImovelModel(
-      json['user'],
-      json['password']
-    );
+  factory LoginModel.fromJson(Map<String, dynamic> json) {
+    return LoginModel(json['user'], json['password']);
+  }
 }

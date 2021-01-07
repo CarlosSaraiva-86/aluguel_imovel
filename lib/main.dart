@@ -6,8 +6,10 @@ import 'conta.dart';
 import 'dart:convert' as convert;
 import 'package:http/http.dart' as http;
 import './models/imovel.dart';
+import 'models/loginModel.dart';
 
 void main() => runApp(Myapp());
+LoginModel login;
 
 class Myapp extends StatelessWidget {
   @override
@@ -189,8 +191,9 @@ class _TelaLoginState extends State<TelaLogin> {
     // Await the http get response, then decode the json-formatted response.
     var response = await http.post(url);
     if (response.statusCode == 200) {
-      var login = convert.jsonDecode(response.body);
-      
+      var model = convert.jsonDecode(response.body);
+
+      login = LoginModel.fromJson(model);
     }
   }
 }
