@@ -3,5 +3,11 @@ class LoginModel {
   String user;
   String password;
 
-  LoginModel(this.id, this.password, this.user);
+  LoginModel(this.password, this.user);
+
+factory ImovelModel.fromJson(Map<String, dynamic> json) {
+    return ImovelModel(
+      json['user'],
+      json['password']
+    );
 }

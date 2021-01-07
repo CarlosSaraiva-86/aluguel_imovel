@@ -188,7 +188,9 @@ class _TelaLoginState extends State<TelaLogin> {
 
     // Await the http get response, then decode the json-formatted response.
     var response = await http.post(url);
-    if (response.statusCode == 200) {}
+    if (response.statusCode == 200) {
+      var login = convert.jsonDecode(response.body);
+      
+    }
   }
 }
-

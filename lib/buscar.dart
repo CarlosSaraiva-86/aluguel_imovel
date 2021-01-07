@@ -32,6 +32,13 @@ class TelaBuscar extends StatefulWidget {
 class _TelaBuscarState extends State<TelaBuscar> {
   TextStyle style = TextStyle(fontFamily: 'Montserrat', fontSize: 20.0);
   @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+    listarImoveis();
+  }
+
+  @override
   Widget build(BuildContext context) {
     final botaoInformacoes1 = ButtonTheme(
         minWidth: MediaQuery.of(context).size.width,
@@ -146,34 +153,45 @@ class _TelaBuscarState extends State<TelaBuscar> {
         ),
         body: SingleChildScrollView(
           child: Container(
-            color: Colors.white,
-            padding: const EdgeInsets.all(0.0),
-            child: Column(
-              children: <Widget>[
-                SizedBox(
-                  height: 250.0,
-                  width: 500.0,
-                  child: Image.asset("imagens/casa2.jpg", fit: BoxFit.cover),
-                ),
-                SizedBox(
-                    width: 600.0, child: const Card(child: Text('Endereço:'))),
-                SizedBox(height: 10.0),
-                botaoInformacoes1,
-                SizedBox(
-                  height: 300.0,
-                  width: 500.0,
-                  child: Image.asset("imagens/casa1.png",
-                      fit: BoxFit
-                          .contain), // como executar a lista no inicio da tela, método no inicio da lista e
-                  // como fazer o foreach
-                ),
-                SizedBox(
-                    width: 600.0, child: const Card(child: Text('Endereço:'))),
-                SizedBox(height: 10.0),
-                botaoInformacoes2,
-              ],
-            ),
-          ),
+              color: Colors.white,
+              padding: const EdgeInsets.all(0.0),
+              child: imoveis.isEmpty
+                  ? Text('Sem registros')
+                  : ListView.builder(
+                      itemCount: imoveis.length,
+                      itemBuilder: (context, index) {
+                        ImovelModel imovel = imoveis[index];
+                        return Card(
+                          child: Image.network(imovel.urlImagem),
+                        );
+                      },
+                    )
+              // child: Column(
+              //   children: <Widget>[
+              //     SizedBox(
+              //       height: 250.0,
+              //       width: 500.0,
+              //       child: Image.network("imovel", fit: BoxFit.cover),
+              //     ),
+              //     SizedBox(
+              //         width: 600.0, child: const Card(child: Text('Endereço:'))),
+              //     SizedBox(height: 10.0),
+              //     botaoInformacoes1,
+              //     SizedBox(
+              //       height: 300.0,
+              //       width: 500.0,
+              //       child: Image.asset("imagens/casa1.png",
+              //           fit: BoxFit
+              //               .contain), // como executar a lista no inicio da tela, método no inicio da lista e
+              //       // como fazer o foreach
+              //     ),
+              //     SizedBox(
+              //         width: 600.0, child: const Card(child: Text('Endereço:'))),
+              //     SizedBox(height: 10.0),
+              //     botaoInformacoes2,
+              //   ],
+              //),
+              ),
         ));
   }
 
@@ -183,7 +201,11 @@ class _TelaBuscarState extends State<TelaBuscar> {
     // Await the http get response, then decode the json-formatted response.
     var response = await http.get(url);
     if (response.statusCode == 200) {
-      imoveis = convert.jsonDecode(response.body);
+      Map<String, dynamic> r = convert.jsonDecode(response.body);
+      var list = r as List; // pega os resultados como lista
+      setState(() {
+        imoveis = list.map((i) => ImovelModel.fromJson(i)).toList();
+      });
     }
   }
 }
