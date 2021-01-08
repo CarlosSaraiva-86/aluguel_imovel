@@ -7,4 +7,11 @@ class ProprietarioModel {
   EnderecoModel endereco;
 
   ProprietarioModel(this.id, this.nome, this.telefone, this.endereco);
+
+  ProprietarioModel.fromJson(Map<String, dynamic> json) {
+    id = json['id'];
+    nome = json['nome'];
+    telefone = json['telefone'];
+    endereco = new EnderecoModel.fromJson(json['endereco']);
+  }
 }

@@ -9,7 +9,6 @@ import 'package:http/http.dart' as http;
 import './models/imovel.dart';
 
 void main() => runApp(Myapp());
-List<ImovelModel> imoveis = new List<ImovelModel>();
 
 class Myapp extends StatelessWidget {
   @override
@@ -31,11 +30,22 @@ class TelaBuscar extends StatefulWidget {
 
 class _TelaBuscarState extends State<TelaBuscar> {
   TextStyle style = TextStyle(fontFamily: 'Montserrat', fontSize: 20.0);
+  List<ImovelModel> imoveis = new List<ImovelModel>();
+
+  _listarImoveis() {
+    listarImoveis().then((response) {
+      setState(() {
+        Iterable r = convert.jsonDecode(response.body);
+        imoveis = r.map((i) => ImovelModel.fromJson(i)).toList();
+      });
+    });
+  }
+
   @override
   void initState() {
     // TODO: implement initState
     super.initState();
-    listarImoveis();
+    _listarImoveis();
   }
 
   @override
@@ -161,9 +171,10 @@ class _TelaBuscarState extends State<TelaBuscar> {
                       itemCount: imoveis.length,
                       itemBuilder: (context, index) {
                         ImovelModel imovel = imoveis[index];
-                        return Card(
-                          child: Image.network(imovel.urlImagem),
-                        );
+                        // return Card(
+                        //   child: Image.network(imovel.urlImagem),
+                        // );
+                        return Text(imovel.endereco.endereco);
                       },
                     )
               // child: Column(
@@ -195,17 +206,9 @@ class _TelaBuscarState extends State<TelaBuscar> {
         ));
   }
 
-  listarImoveis() async {
+  Future listarImoveis() async {
     var url = 'https://aluguel-api.herokuapp.com/api/Imovel/GetAll';
-
     // Await the http get response, then decode the json-formatted response.
-    var response = await http.get(url);
-    if (response.statusCode == 200) {
-      Map<String, dynamic> r = convert.jsonDecode(response.body);
-      var list = r as List; // pega os resultados como lista
-      setState(() {
-        imoveis = list.map((i) => ImovelModel.fromJson(i)).toList();
-      });
-    }
+    return await http.get(url);
   }
 }

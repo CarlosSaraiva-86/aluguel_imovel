@@ -13,18 +13,28 @@ class ImovelModel {
   ProprietarioModel proprietario;
   EnderecoModel endereco;
 
-  ImovelModel(this.id, this.area, this.terreno, this.numQuartos,
-      this.numBanheiro, this.andar, this.vagas, this.urlImagem);
+  ImovelModel(
+      this.id,
+      this.area,
+      this.terreno,
+      this.numQuartos,
+      this.numBanheiro,
+      this.andar,
+      this.vagas,
+      this.urlImagem,
+      this.proprietario,
+      this.endereco);
 
-  factory ImovelModel.fromJson(Map<String, dynamic> json) {
-    return ImovelModel(
-        int.parse(json['id']),
-        int.parse(json['area']),
-        int.parse(json['terreno']),
-        int.parse(json['numQuartos']),
-        int.parse(json['numBanheiro']),
-        json['andar'],
-        int.parse(json['vagas']),
-        json['urlImagem']);
+  ImovelModel.fromJson(Map<String, dynamic> json) {
+    id = json['id'];
+    area = json['area'];
+    terreno = json['terreno'];
+    numQuartos = json['numQuartos'];
+    numBanheiro = json['numBanheiro'];
+    andar = json['andar'];
+    vagas = json['vagas'];
+    urlImagem = json['urlImagem'];
+    proprietario = new ProprietarioModel.fromJson(json['proprietario']);
+    endereco = new EnderecoModel.fromJson(json['endereco']);
   }
 }
